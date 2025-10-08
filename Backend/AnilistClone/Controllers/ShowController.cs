@@ -1,3 +1,4 @@
+using AnilistClone.DTOs.PostDTOs;
 using AnilistClone.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,6 +24,10 @@ public class ShowController : ControllerBase
 
         try
         {
+            if (id < 0)
+            {
+                return BadRequest();
+            }
             var show = await _animeService.GetShow(id);
             return Ok(show);
         }
@@ -35,25 +40,32 @@ public class ShowController : ControllerBase
     }
 
     [HttpPost("search-animes")]
-    public async Task<IActionResult> SearchShows([FromBody] string search)
+    public async Task<IActionResult> SearchShows([FromBody]  SearchDTO request )
     {
+        _logger.LogInformation("SearchShows is called with the string {search}", request.searchTerm);
         try
         {
-            _logger.LogInformation("SearchShows is called with the string {search}",search);
-            var shows = await _animeService.SearchShows(search); 
+
+            if (string.IsNullOrWhiteSpace(request.searchTerm))
+            {
+                return BadRequest("Search term cannot be null or whitespace");
+            }
+            var shows = await _animeService.SearchShows(request.searchTerm); 
             return Ok(shows);
         } catch (Exception ex) {
 
-            _logger.LogError(ex,"Error retrieving search result with the string {search}", search);
+            _logger.LogError(ex,"Error retrieving search result with the string {search}", request.searchTerm);
             return StatusCode(500, "An error occurred");
         }
     }
 
     [HttpGet("get-shows")]
     public async Task<IActionResult> GetShows()
-    {   try
+    {
+        _logger.LogInformation("GetShows is called when retrieving a list of shows");
+        try
         {
-            _logger.LogInformation("GetShows is called when retrieving a list of shows");
+ 
             var shows = await _animeService.GetShows();
             return Ok(shows);
         }
