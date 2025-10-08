@@ -15,7 +15,7 @@ public class ShowController : ControllerBase
         _logger = logger;
     }
 
-    [HttpPost("GetShow")]
+    [HttpPost("get-show")]
     public async Task<IActionResult> GetShow([FromBody] int id)
     {
 
@@ -30,23 +30,39 @@ public class ShowController : ControllerBase
         {
         _logger.LogError(ex, "Error retrieving show with the id {ShowId}", id);
 
-            return StatusCode(500, "An error occured");
+            return StatusCode(500, "An error occurred");
         }
     }
 
-    [HttpPost("Search-Animes")]
+    [HttpPost("search-animes")]
     public async Task<IActionResult> SearchShows([FromBody] string search)
     {
-       
-        var shows = await _animeService.SearchShows(search); ;
-        return Ok(shows);
+        try
+        {
+            _logger.LogInformation("SearchShows is called with the string {search}",search);
+            var shows = await _animeService.SearchShows(search); 
+            return Ok(shows);
+        } catch (Exception ex) {
+
+            _logger.LogError(ex,"Error retrieving search result with the string {search}", search);
+            return StatusCode(500, "An error occurred");
+        }
     }
 
-    [HttpGet("GetShows")]
+    [HttpGet("get-shows")]
     public async Task<IActionResult> GetShows()
-    {
-        var shows = await _animeService.GetShows();
-        return Ok(shows);
+    {   try
+        {
+            _logger.LogInformation("GetShows is called when retrieving a list of shows");
+            var shows = await _animeService.GetShows();
+            return Ok(shows);
+        }
+        catch(Exception ex)
+        {
+            _logger.LogError(ex, "Error retrieving a list of shows");
+
+            return StatusCode(500, "An error occurred");
+        }
     }
 }
 
