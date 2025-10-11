@@ -5,10 +5,10 @@ async function doSearch(){
 try{
 const searchInput = document.getElementById("site-search").value;
 
-const response = await fetch("http://localhost:5243/Show/Search-Animes", {
+const response = await fetch("http://localhost:5243/Show/search-animes", {
 method: "POST",
 headers: {"Content-Type": "application/json"},
-body: JSON.stringify(searchInput)
+body: JSON.stringify({ searchTerm: searchInput })
 
 });
 

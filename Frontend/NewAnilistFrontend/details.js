@@ -9,7 +9,7 @@ async function fetchShow() {
     const id = parseInt(urlParams.get('id'), 10);
     if (!id) return;
 
-    const response = await fetch("http://localhost:5243/Show/GetShow", {
+    const response = await fetch("http://localhost:5243/Show/get-show", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(id)

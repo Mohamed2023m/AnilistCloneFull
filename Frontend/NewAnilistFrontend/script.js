@@ -1,6 +1,6 @@
 console.log("Loaded script:", document.currentScript.src);
 
-var url = "http://localhost:5243/Show/GetShows";
+var url = "http://localhost:5243/Show/get-shows";
 
 async function fetchJson() {
     try {
