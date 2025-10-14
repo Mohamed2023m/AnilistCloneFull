@@ -1,6 +1,8 @@
+using AnilistClone.DTOs.GetDTOs;
 using AnilistClone.DTOs.PostDTOs;
 using AnilistClone.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using static System.Reflection.Metadata.BlobBuilder;
 
 [ApiController]
 [Route("[controller]")]
@@ -65,9 +67,21 @@ public class ShowController : ControllerBase
         _logger.LogInformation("GetShows is called when retrieving a list of shows");
         try
         {
- 
             var shows = await _animeService.GetShows();
-            return Ok(shows);
+
+            var dto = shows
+     .Select(show => new ShowDto
+     {
+         Id = show.Id,
+         Title = show.Title,
+         coverImage = show.CoverImage,
+  
+
+     })
+     .ToList();
+
+      return Ok(dto);
+        
         }
         catch(Exception ex)
         {
