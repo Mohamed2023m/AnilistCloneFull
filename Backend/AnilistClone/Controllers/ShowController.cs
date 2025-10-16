@@ -42,7 +42,7 @@ public class ShowController : ControllerBase
     }
 
     [HttpPost("search-animes")]
-    public async Task<IActionResult> SearchShows([FromBody]  SearchDTO request )
+    public async Task<IActionResult> SearchShows([FromBody]  SearchDTO request)
     {
         _logger.LogInformation("SearchShows is called with the string {search}", request.searchTerm);
         try
@@ -52,7 +52,7 @@ public class ShowController : ControllerBase
             {
                 return BadRequest("Search term cannot be null or whitespace");
             }
-            var shows = await _animeService.SearchShows(request.searchTerm); 
+            var shows = await _animeService.SearchShows(request.searchTerm, request.currentPage); 
             return Ok(shows);
         } catch (Exception ex) {
 

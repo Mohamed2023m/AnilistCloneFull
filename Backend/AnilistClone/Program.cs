@@ -10,6 +10,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpClient<IAnimeService, AnimeService>();
+builder.Services.AddMemoryCache();
 
 
 builder.Services.AddCors(options =>

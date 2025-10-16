@@ -128,12 +128,12 @@ genres
 
         }
 
-        public async Task<IEnumerable<Show>> SearchShows(string search)
+        public async Task<IEnumerable<Show>> SearchShows(string search, int currentPage)
         {
             String apiUrl = "https://graphql.anilist.co";
 
-            string graphQLQuery = @"query($search: String) {
-  Page(page: 1, perPage: 10) {
+            string graphQLQuery = @"query($search: String,  $currentPage: Int) {
+  Page(page: $currentPage, perPage: 2) {
      media( search: $search type: ANIME countryOfOrigin: JP) {
       id
       coverImage {
@@ -162,13 +162,18 @@ genres
     }
   }
 }";
-            var variable = new { search = search };
+            var variables = new
+            {
+                search = search,
+                currentPage = currentPage
+            };
+
 
 
             var payload = new
             {
                 query = graphQLQuery,
-                variables = variable
+                variables = variables
             };
 
             string jsonPayload = JsonConvert.SerializeObject(payload);

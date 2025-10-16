@@ -9,7 +9,7 @@ namespace AnilistClone.Services.Interfaces
 
         public Task<IEnumerable<Show>> GetShows();
 
-        public Task<IEnumerable<Show>> SearchShows(string search);
+        Task<IEnumerable<Show>> SearchShows(string search, int currentPage);
 
     }
 }
