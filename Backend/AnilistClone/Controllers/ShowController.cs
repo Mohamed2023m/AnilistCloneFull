@@ -8,13 +8,13 @@ using static System.Reflection.Metadata.BlobBuilder;
 [Route("[controller]")]
 public class ShowController : ControllerBase
 {
-    private readonly ICachingService _animeService;
+    private readonly ICachingService _cachingService;
 
     private readonly ILogger<ShowController> _logger;
 
-    public ShowController(ICachingService animeService, ILogger<ShowController> logger)
+    public ShowController(ICachingService cachingService, ILogger<ShowController> logger)
     {
-        _animeService = animeService;
+        _cachingService = cachingService;
         _logger = logger;
     }
 
@@ -30,7 +30,7 @@ public class ShowController : ControllerBase
             {
                 return BadRequest();
             }
-            var show = await _animeService.GetShow(id);
+            var show = await _cachingService.GetShow(id);
             return Ok(show);
         }
         catch(Exception ex)
@@ -52,7 +52,7 @@ public class ShowController : ControllerBase
             {
                 return BadRequest("Search term cannot be null or whitespace");
             }
-            var shows = await _animeService.SearchShows(request.searchTerm); 
+            var shows = await _cachingService.SearchShows(request.searchTerm); 
             return Ok(shows);
         } catch (Exception ex) {
 
@@ -67,7 +67,7 @@ public class ShowController : ControllerBase
         _logger.LogInformation("GetShows is called when retrieving a list of shows");
         try
         {
-            var shows = await _animeService.GetShows(request.CurrentPage);
+            var shows = await _cachingService.GetShows(request.CurrentPage);
 
             var dto = shows
      .Select(show => new ShowDto
