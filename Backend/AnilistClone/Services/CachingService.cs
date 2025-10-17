@@ -4,7 +4,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace AnilistClone.Services
 {
-    public class CachingService
+    public class CachingService : ICachingService
     {
         private readonly IAnimeService _animeService;
         private readonly IMemoryCache _cache;

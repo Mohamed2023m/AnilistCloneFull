@@ -8,11 +8,11 @@ using static System.Reflection.Metadata.BlobBuilder;
 [Route("[controller]")]
 public class ShowController : ControllerBase
 {
-    private readonly IAnimeService _animeService;
+    private readonly ICachingService _animeService;
 
     private readonly ILogger<ShowController> _logger;
 
-    public ShowController(IAnimeService animeService, ILogger<ShowController> logger)
+    public ShowController(ICachingService animeService, ILogger<ShowController> logger)
     {
         _animeService = animeService;
         _logger = logger;
