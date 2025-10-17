@@ -36,9 +36,9 @@ namespace AnilistClone.Services
 
         }
 
-        public async Task<IEnumerable<Show>> GetShows()
+        public async Task<IEnumerable<Show>> GetShows(int currentPage)
         {
-            string cacheKey = $"All_Trending_Shows";
+            string cacheKey = $"All_Trending_Shows_Page_{currentPage}";
 
 
             if (_cache.TryGetValue(cacheKey, out IEnumerable<Show> cachedShows))
@@ -47,7 +47,7 @@ namespace AnilistClone.Services
             }
 
 
-            var myData = await _animeService.GetShows();
+            var myData = await _animeService.GetShows(currentPage);
 
             _cache.Set(cacheKey, myData, TimeSpan.FromHours(1));
 
@@ -55,9 +55,9 @@ namespace AnilistClone.Services
         }
 
 
-        public async Task<IEnumerable<Show>> SearchShows(string searchTerm, int currentPage)
+        public async Task<IEnumerable<Show>> SearchShows(string searchTerm)
         {
-            string cacheKey = $"Shows_Search_{searchTerm.Replace(" ", "_").ToLower()}_Page_{currentPage}";
+            string cacheKey = $"Shows_Search_{searchTerm.Replace(" ", "_").ToLower()}";
 
             if (_cache.TryGetValue(cacheKey, out IEnumerable<Show> cachedShows))
             {
@@ -65,7 +65,7 @@ namespace AnilistClone.Services
             }
 
 
-            var myData = await _animeService.SearchShows(searchTerm, currentPage);
+            var myData = await _animeService.SearchShows(searchTerm);
 
             _cache.Set(cacheKey, myData, TimeSpan.FromMinutes(5));
 

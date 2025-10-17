@@ -76,11 +76,12 @@ genres
 
         }
 
-        public async Task<IEnumerable<Show>> GetShows()
+        public async Task<IEnumerable<Show>> GetShows(int currentPage)
         {
             String apiUrl = "https://graphql.anilist.co";
 
-            string graphQLQuery = @"query {Page(page: 1, perPage: 50) {
+            string graphQLQuery = @"query( $currentPage: Int) {
+Page(page: $currentPage, perPage: 5) {
     media( sort: POPULARITY_DESC type: ANIME countryOfOrigin: JP status: RELEASING) {
       id
       coverImage {
@@ -99,9 +100,19 @@ genres
     }
   }
 }";
+
+            var variable = new
+            {
+                currentPage = currentPage,
+
+            };
+
+
             var payload = new
             {
                 query = graphQLQuery,
+                variables = variable
+
             };
 
             string jsonPayload = JsonConvert.SerializeObject(payload);
@@ -128,12 +139,12 @@ genres
 
         }
 
-        public async Task<IEnumerable<Show>> SearchShows(string search, int currentPage)
+        public async Task<IEnumerable<Show>> SearchShows(string search)
         {
             String apiUrl = "https://graphql.anilist.co";
 
-            string graphQLQuery = @"query($search: String,  $currentPage: Int) {
-  Page(page: $currentPage, perPage: 2) {
+            string graphQLQuery = @"query($search: String) {
+  Page(page: 1, perPage: 5) {
      media( search: $search type: ANIME countryOfOrigin: JP) {
       id
       coverImage {
@@ -162,10 +173,10 @@ genres
     }
   }
 }";
-            var variables = new
+            var variable = new
             {
                 search = search,
-                currentPage = currentPage
+              
             };
 
 
@@ -173,7 +184,7 @@ genres
             var payload = new
             {
                 query = graphQLQuery,
-                variables = variables
+                variables = variable
             };
 
             string jsonPayload = JsonConvert.SerializeObject(payload);

@@ -52,7 +52,7 @@ public class ShowController : ControllerBase
             {
                 return BadRequest("Search term cannot be null or whitespace");
             }
-            var shows = await _animeService.SearchShows(request.searchTerm, request.currentPage); 
+            var shows = await _animeService.SearchShows(request.searchTerm); 
             return Ok(shows);
         } catch (Exception ex) {
 
@@ -61,13 +61,13 @@ public class ShowController : ControllerBase
         }
     }
 
-    [HttpGet("get-shows")]
-    public async Task<IActionResult> GetShows()
+    [HttpPost("get-shows")]
+    public async Task<IActionResult> GetShows(PagingRequest request)
     {
         _logger.LogInformation("GetShows is called when retrieving a list of shows");
         try
         {
-            var shows = await _animeService.GetShows();
+            var shows = await _animeService.GetShows(request.CurrentPage);
 
             var dto = shows
      .Select(show => new ShowDto

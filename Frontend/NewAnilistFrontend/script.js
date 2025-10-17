@@ -2,9 +2,26 @@ console.log("Loaded script:", document.currentScript.src);
 
 var url = "http://localhost:5243/Show/get-shows";
 
+
+let currentPage = 1;
+async function  handleOnClick(){
+
+currentPage++
+fetchJson();
+
+}
+
+document.getElementById("LoadButton").addEventListener("click",handleOnClick);
+
+
 async function fetchJson() {
     try {
-        const response = await fetch(url);        
+        const response = await fetch(url ,{
+method: "POST",
+headers: {"Content-Type": "application/json"},
+body: JSON.stringify({ currentPage: currentPage })
+
+});       
         const json = await response.json();       
         const outputDiv = document.getElementById("output");
         console.log(json);                        
@@ -24,5 +41,7 @@ async function fetchJson() {
         console.error('error:', error);           
     }
 }
+
+
 
 fetchJson();

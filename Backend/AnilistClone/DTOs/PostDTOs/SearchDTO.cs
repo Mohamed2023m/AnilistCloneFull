@@ -5,6 +5,6 @@
 
         public string? searchTerm { get; set; }
 
-        public int currentPage { get; set; }
+
     }
 }

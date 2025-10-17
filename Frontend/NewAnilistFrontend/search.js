@@ -2,20 +2,9 @@ console.log("Loaded script:", document.currentScript.src);
 
 
 
-let currentPage = 1;
-async function  handleOnClick(){
-
-currentPage++
-
-await doSearch(true)
-
-}
-
-document.getElementById("LoadButton").addEventListener("click",handleOnClick);
 
 
-
-async function doSearch( append = false ){
+async function doSearch(){
 
 try{
 const searchInput = document.getElementById("site-search").value;
@@ -24,7 +13,7 @@ const searchInput = document.getElementById("site-search").value;
 const response = await fetch("http://localhost:5243/Show/search-animes", {
 method: "POST",
 headers: {"Content-Type": "application/json"},
-body: JSON.stringify({ searchTerm: searchInput, currentPage: currentPage })
+body: JSON.stringify({ searchTerm: searchInput})
 
 });
 
@@ -34,7 +23,7 @@ if(!response.ok) throw new Error("Network response was not ok");
 const json = await response.json();
 
 console.log("Response data:", json);
-renderResults(json, append);
+renderResults(json);
 } catch (error){
 
     console.error('error', error);
@@ -44,10 +33,10 @@ renderResults(json, append);
 
 }
 
-function renderResults(json, append = false){
+function renderResults(json){
 
 const resultContainer = document.getElementById("results");
-if(!append)
+
 resultContainer.innerHTML = "";
 
 json.forEach(anime => {
@@ -65,7 +54,7 @@ resultContainer.appendChild(resultDiv);
 
 document.getElementById("searchButton").addEventListener("click",()=>{
 
-currentPage = 1;
+
 doSearch(false);
 
 
