@@ -11,6 +11,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpClient<IAnimeService, AnimeService>();
 builder.Services.AddScoped<ICachingService, CachingService>();
+builder.Services.AddScoped<CachingWrapper>();
 builder.Services.AddMemoryCache();
 
 

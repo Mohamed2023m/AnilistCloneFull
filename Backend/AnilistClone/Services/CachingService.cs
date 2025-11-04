@@ -8,32 +8,43 @@ namespace AnilistClone.Services
     {
         private readonly IAnimeService _animeService;
         private readonly IMemoryCache _cache;
+        private readonly CachingWrapper _wrapper;
 
 
-        public CachingService(IMemoryCache cache, IAnimeService animeService)
+        public CachingService(IMemoryCache cache, IAnimeService animeService, CachingWrapper wrapper)
         {
 
             _cache = cache;
             _animeService = animeService;
+            _wrapper = wrapper;
+            
 
         }
 
+        //public async Task<Show> GetShow(int id)
+        //{
+
+        //   string cacheKey = $"Show_{id}";
+
+        //    if (_cache.TryGetValue(cacheKey, out Show cachedShow))
+        //    {
+        //        return cachedShow;
+        //    }
+
+        //    var myData = await _animeService.GetShow(id);
+
+        //    _cache.Set(cacheKey, myData, TimeSpan.FromHours(6));
+
+        //    return myData;
+
+        //}
+
+
         public async Task<Show> GetShow(int id)
         {
+            string cacheKey = $"Show_{id}";
 
-           string cacheKey = $"Show_{id}";
-
-            if (_cache.TryGetValue(cacheKey, out Show cachedShow))
-            {
-                return cachedShow;
-            }
-
-            var myData = await _animeService.GetShow(id);
-
-            _cache.Set(cacheKey, myData, TimeSpan.FromHours(6));
-
-            return myData;
-
+            return  await _wrapper.GetShow(cacheKey,  () =>  _animeService.GetShow(id));
         }
 
         public async Task<IEnumerable<Show>> GetShows(int currentPage)
@@ -41,17 +52,7 @@ namespace AnilistClone.Services
             string cacheKey = $"All_Trending_Shows_Page_{currentPage}";
 
 
-            if (_cache.TryGetValue(cacheKey, out IEnumerable<Show> cachedShows))
-            {
-                return cachedShows;
-            }
-
-
-            var myData = await _animeService.GetShows(currentPage);
-
-            _cache.Set(cacheKey, myData, TimeSpan.FromHours(1));
-
-            return myData;
+            return await _wrapper.GetShows(cacheKey, () => _animeService.GetShows(currentPage));
         }
 
 
@@ -59,17 +60,11 @@ namespace AnilistClone.Services
         {
             string cacheKey = $"Shows_Search_{searchTerm.Replace(" ", "_").ToLower()}";
 
-            if (_cache.TryGetValue(cacheKey, out IEnumerable<Show> cachedShows))
-            {
-                return cachedShows;
-            }
+      
 
+         
 
-            var myData = await _animeService.SearchShows(searchTerm);
-
-            _cache.Set(cacheKey, myData, TimeSpan.FromMinutes(5));
-
-            return myData;
+            return await _wrapper.SearchShows(cacheKey, () => _animeService.SearchShows(searchTerm));
         }
 
 
