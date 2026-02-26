@@ -17,7 +17,7 @@ document.getElementById("LoadButton").addEventListener("click",handleOnClick);
 async function fetchJson() {
     try {
         const response = await fetch(url ,{
-method: "POST",
+method: "Get",
 headers: {"Content-Type": "application/json"},
 body: JSON.stringify({ currentPage: currentPage })
 

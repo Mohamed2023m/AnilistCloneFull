@@ -10,7 +10,7 @@ async function fetchShow() {
     if (!id) return;
 
     const response = await fetch("http://localhost:5243/Show/get-show", {
-      method: "POST",
+      method: "Get",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(id)
     });
