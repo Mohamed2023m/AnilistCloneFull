@@ -18,8 +18,8 @@ public class ShowController : ControllerBase
         _logger = logger;
     }
 
-    [HttpPost("get-show")]
-    public async Task<IActionResult> GetShow([FromBody] int id)
+    [HttpGet("get-show")]
+    public async Task<IActionResult> GetShow([FromQuery] int id)
     {
 
         _logger.LogInformation("GetShow is called with the id {ShowId}", id);
@@ -61,13 +61,13 @@ public class ShowController : ControllerBase
         }
     }
 
-    [HttpPost("get-shows")]
-    public async Task<IActionResult> GetShows(PagingRequest request)
+    [HttpGet("get-shows")]
+    public async Task<IActionResult> GetShows([FromQuery] int currentPage)
     {
         _logger.LogInformation("GetShows is called when retrieving a list of shows");
         try
         {
-            var shows = await _cachingService.GetShows(request.CurrentPage);
+            var shows = await _cachingService.GetShows(currentPage);
 
             var dto = shows
      .Select(show => new ShowDto
