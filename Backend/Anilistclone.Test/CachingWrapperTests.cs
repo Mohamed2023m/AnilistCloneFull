@@ -9,7 +9,7 @@ namespace Anilistclone.Test
 
 
         [Fact]
-        public async Task GetShow_Should_CallFetch_And_StoreValue_WhenCacheMisses()
+        public async Task GetShow_FetchesAndCaches_OnCacheMiss()
         {
 
             //Arrange
@@ -21,7 +21,7 @@ namespace Anilistclone.Test
 
             bool wascalled = false;
 
-           async Task<int> FakeMethod()
+           async Task<int> FakeFetchMethod()
             {
 
                 wascalled = true;
@@ -30,12 +30,44 @@ namespace Anilistclone.Test
             }
             //Act
 
-            var result = await  service.GetShow(cacheKey, () =>  FakeMethod());
+            var result = await  service.GetShow(cacheKey, () =>  FakeFetchMethod());
 
             Assert.True(wascalled);
             Assert.Equal(1, result);
             Assert.True(cache.TryGetValue(cacheKey, out var value));
             Assert.Equal(1, (int)value);
+
+
+        }
+
+
+        [Fact]
+        public async Task GetShow_CacheMiss_DoesNotCacheWhenFetchFails()
+        {
+
+            //Arrange
+            var cache = new MemoryCache(new MemoryCacheOptions());
+
+            var service = new CachingWrapper(cache);
+
+            string cacheKey = $"Show_{1}";
+
+            bool wascalled = false;
+
+            
+            async Task<int> FakeFetchMethod()
+            {
+                wascalled = true;
+
+                    throw new Exception("Method called");
+                return 0;
+            }
+            //Act
+
+            await Assert.ThrowsAnyAsync<Exception>(() => service.GetShow(cacheKey, () => FakeFetchMethod()));
+            Assert.True(wascalled);
+            Assert.False(cache.TryGetValue(cacheKey, out var value));
+   
 
 
         }
