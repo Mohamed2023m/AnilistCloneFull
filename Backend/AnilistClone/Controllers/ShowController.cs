@@ -2,7 +2,7 @@ using AnilistClone.DTOs.GetDTOs;
 using AnilistClone.DTOs.PostDTOs;
 using AnilistClone.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using static System.Reflection.Metadata.BlobBuilder;
+
 
 [ApiController]
 [Route("[controller]")]
