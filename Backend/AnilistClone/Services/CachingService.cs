@@ -17,7 +17,7 @@ namespace AnilistClone.Services
             _cache = cache;
             _animeService = animeService;
             _wrapper = wrapper;
-            
+
 
         }
 
@@ -44,7 +44,7 @@ namespace AnilistClone.Services
         {
             string cacheKey = $"Show_{id}";
 
-            return  await _wrapper.GetShow(cacheKey,  () =>  _animeService.GetShow(id));
+            return await _wrapper.GetShow(cacheKey, () => _animeService.GetShow(id));
         }
 
         public async Task<IEnumerable<Show>> GetShows(int currentPage)
@@ -59,10 +59,6 @@ namespace AnilistClone.Services
         public async Task<IEnumerable<Show>> SearchShows(string searchTerm)
         {
             string cacheKey = $"Shows_Search_{searchTerm.Replace(" ", "_").ToLower()}";
-
-      
-
-         
 
             return await _wrapper.SearchShows(cacheKey, () => _animeService.SearchShows(searchTerm));
         }

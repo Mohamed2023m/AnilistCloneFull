@@ -10,7 +10,7 @@ namespace AnilistClone.DTOs.GetDTOs
 
         public CoverImage? coverImage { get; set; }
 
-     
+
 
 
     }

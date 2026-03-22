@@ -13,7 +13,7 @@ namespace AnilistClone.Services
             _cache = cache;
         }
 
-        public async Task<T> GetShow<T>( string cacheKey, Func<Task<T>> fetch)
+        public async Task<T> GetShow<T>(string cacheKey, Func<Task<T>> fetch)
         {
             if (_cache.TryGetValue(cacheKey, out T cachedShow))
             {

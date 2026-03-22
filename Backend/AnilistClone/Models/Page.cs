@@ -2,6 +2,6 @@
 {
     public class Page
     {
-         public List<Show> ?media { get; set; }
+        public List<Show>? media { get; set; }
     }
 }

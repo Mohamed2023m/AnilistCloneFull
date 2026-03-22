@@ -18,13 +18,13 @@ namespace Anilistclone.Test
         [Fact]
         public async Task GetShow_Should_return_200ok_onFetchAndCache()
         {
-            
-            //Arrange
-          var mockCaching = new Mock<ICachingService>();
-          var mock = new Mock<ILogger<ShowController>>();
-          ILogger<ShowController> logger = mock.Object;
 
-          ShowController controller = new ShowController(mockCaching.Object,logger);
+            //Arrange
+            var mockCaching = new Mock<ICachingService>();
+            var mock = new Mock<ILogger<ShowController>>();
+            ILogger<ShowController> logger = mock.Object;
+
+            ShowController controller = new ShowController(mockCaching.Object, logger);
 
             mockCaching.Setup(caching => caching.GetShow(It.IsAny<int>()))
                     .ReturnsAsync(new Show());
@@ -38,6 +38,36 @@ namespace Anilistclone.Test
 
             Assert.NotNull(okResult);
             Assert.Equal(200, okResult.StatusCode);
+
+        }
+
+
+
+
+
+        [Fact]
+        public async Task GetShow_Should_return_BADrequest()
+        {
+
+            //Arrange
+            var mockCaching = new Mock<ICachingService>();
+            var mock = new Mock<ILogger<ShowController>>();
+            ILogger<ShowController> logger = mock.Object;
+
+            ShowController controller = new ShowController(mockCaching.Object, logger);
+
+            mockCaching.Setup(caching => caching.GetShow(It.IsAny<int>()))
+                    .ReturnsAsync(new Show());
+
+            //Act
+            var result = await controller.GetShow(-1);
+
+            var BadResult = result as BadRequestObjectResult;
+
+            //Assert
+
+            Assert.Null(BadResult);
+            Assert.Equal(400, BadResult.StatusCode);
 
         }
 

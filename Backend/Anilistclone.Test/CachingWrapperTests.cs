@@ -21,7 +21,7 @@ namespace Anilistclone.Test
 
             bool wascalled = false;
 
-           async Task<int> FakeFetchMethod()
+            async Task<int> FakeFetchMethod()
             {
 
                 wascalled = true;
@@ -30,7 +30,7 @@ namespace Anilistclone.Test
             }
             //Act
 
-            var result = await  service.GetShow(cacheKey, () =>  FakeFetchMethod());
+            var result = await service.GetShow(cacheKey, () => FakeFetchMethod());
 
             Assert.True(wascalled);
             Assert.Equal(1, result);
@@ -54,12 +54,12 @@ namespace Anilistclone.Test
 
             bool wascalled = false;
 
-            
+
             async Task<int> FakeFetchMethod()
             {
                 wascalled = true;
 
-                    throw new Exception("Method called");
+                throw new Exception("Method called");
                 return 0;
             }
             //Act
@@ -100,9 +100,6 @@ namespace Anilistclone.Test
             Assert.Equal(1, result);
 
         }
-
-
-
 
 
     }

@@ -20,10 +20,10 @@ namespace AnilistClone.Services
             String apiUrl = "https://graphql.anilist.co";
 
 
-        
-           
 
-                string graphQLQuery = @"query ($id: Int) {
+
+
+            string graphQLQuery = @"query ($id: Int) {
   Media(id: $id) {
     id
 coverImage {
@@ -45,26 +45,27 @@ genres
 }";
 
 
-                var variable = new { id = id };
+            var variable = new { id = id };
 
-                var payload = new
-                {
-                    query = graphQLQuery,
-                    variables = variable
-                };
+            var payload = new
+            {
+                query = graphQLQuery,
+                variables = variable
+            };
 
-                string jsonPayload = JsonConvert.SerializeObject(payload);
+            string jsonPayload = JsonConvert.SerializeObject(payload);
 
 
 
-            using var request = new HttpRequestMessage(HttpMethod.Post, apiUrl) {
+            using var request = new HttpRequestMessage(HttpMethod.Post, apiUrl)
+            {
                 Content = new StringContent(jsonPayload, Encoding.UTF8, "application/json")
             };
 
-                using var response = await _client.SendAsync(request);
+            using var response = await _client.SendAsync(request);
 
-                    string responseData = await response.Content.ReadAsStringAsync();
-                var showResponse = JsonConvert.DeserializeObject<GraphQLResponse<MediaWrapper>>(responseData);
+            string responseData = await response.Content.ReadAsStringAsync();
+            var showResponse = JsonConvert.DeserializeObject<GraphQLResponse<MediaWrapper>>(responseData);
 
 
 
@@ -176,7 +177,7 @@ Page(page: $currentPage, perPage: 5) {
             var variable = new
             {
                 search = search,
-              
+
             };
 
 

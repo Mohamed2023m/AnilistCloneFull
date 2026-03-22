@@ -33,30 +33,31 @@ public class ShowController : ControllerBase
             var show = await _cachingService.GetShow(id);
             return Ok(show);
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
-        _logger.LogError(ex, "Error retrieving show with the id {ShowId}", id);
+            _logger.LogError(ex, "Error retrieving show with the id {ShowId}", id);
 
             return StatusCode(500, "An error occurred");
         }
     }
 
     [HttpPost("search-animes")]
-    public async Task<IActionResult> SearchShows([FromBody]  SearchDTO request)
+    public async Task<IActionResult> SearchShows([FromBody] SearchDTO request)
     {
         _logger.LogInformation("SearchShows is called with the string {search}", request.searchTerm);
         try
         {
-
             if (string.IsNullOrWhiteSpace(request.searchTerm))
             {
                 return BadRequest("Search term cannot be null or whitespace");
             }
-            var shows = await _cachingService.SearchShows(request.searchTerm); 
+            var shows = await _cachingService.SearchShows(request.searchTerm);
             return Ok(shows);
-        } catch (Exception ex) {
+        }
+        catch (Exception ex)
+        {
 
-            _logger.LogError(ex,"Error retrieving search result with the string {search}", request.searchTerm);
+            _logger.LogError(ex, "Error retrieving search result with the string {search}", request.searchTerm);
             return StatusCode(500, "An error occurred");
         }
     }
@@ -75,15 +76,15 @@ public class ShowController : ControllerBase
          Id = show.Id,
          Title = show.Title,
          coverImage = show.CoverImage,
-  
+
 
      })
      .ToList();
 
-      return Ok(dto);
-        
+            return Ok(dto);
+
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             _logger.LogError(ex, "Error retrieving a list of shows");
 

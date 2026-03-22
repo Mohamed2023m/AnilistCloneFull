@@ -2,9 +2,9 @@
 {
     public class MediaWrapper
     {
-       public Show ?Media { get; set; }
+        public Show? Media { get; set; }
 
-       public Page ?Page { get; set; }
+        public Page? Page { get; set; }
     }
 
 }
