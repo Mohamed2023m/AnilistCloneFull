@@ -46,28 +46,23 @@ namespace Anilistclone.Test
 
 
         [Fact]
-        public async Task GetShow_Should_return_BADrequest()
+        public async Task GetShow_ShouldReturnBadRequest_WhenIdIsNegativet()
         {
 
             //Arrange
             var mockCaching = new Mock<ICachingService>();
             var mock = new Mock<ILogger<ShowController>>();
             ILogger<ShowController> logger = mock.Object;
-
             ShowController controller = new ShowController(mockCaching.Object, logger);
 
-            mockCaching.Setup(caching => caching.GetShow(It.IsAny<int>()))
-                    .ReturnsAsync(new Show());
 
             //Act
             var result = await controller.GetShow(-1);
 
-            var BadResult = result as BadRequestObjectResult;
-
             //Assert
-
-            Assert.Null(BadResult);
-            Assert.Equal(400, BadResult.StatusCode);
+            var badRequestResult = Assert.IsType<BadRequestResult>(result);
+            Assert.Equal(400, badRequestResult.StatusCode);
+            mockCaching.Verify(caching => caching.GetShow(It.IsAny<int>()), Times.Never);
 
         }
 
