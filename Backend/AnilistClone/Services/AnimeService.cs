@@ -3,26 +3,24 @@ using System.Text;
 using Newtonsoft.Json;
 using AnilistClone.Services.Interfaces;
 using GraphQL.Validation;
+using Microsoft.Extensions.Configuration;
 
 namespace AnilistClone.Services
 {
     public class AnimeService : IAnimeService
     {
-        private HttpClient _client;
+        private readonly HttpClient _client;
+        private readonly string _anilistApiUrl;
 
-        public AnimeService(HttpClient client)
+        public AnimeService(HttpClient client, IConfiguration config)
         {
             _client = client;
+            _anilistApiUrl = config["AnilistApiUrl"];
         }
 
         public async Task<Show> GetShow(int id)
         {
-            String apiUrl = "https://graphql.anilist.co";
-
-
-
-
-
+            
             string graphQLQuery = @"query ($id: Int) {
   Media(id: $id) {
     id
@@ -55,19 +53,20 @@ genres
 
             string jsonPayload = JsonConvert.SerializeObject(payload);
 
-
-
-            using var request = new HttpRequestMessage(HttpMethod.Post, apiUrl)
+            using var request = new HttpRequestMessage(HttpMethod.Post, _anilistApiUrl)
             {
                 Content = new StringContent(jsonPayload, Encoding.UTF8, "application/json")
             };
 
             using var response = await _client.SendAsync(request);
 
+            if (!response.IsSuccessStatusCode)
+            {
+
+                throw new HttpRequestException($"AniList API returned {response.StatusCode}");
+            }
             string responseData = await response.Content.ReadAsStringAsync();
             var showResponse = JsonConvert.DeserializeObject<GraphQLResponse<MediaWrapper>>(responseData);
-
-
 
             return showResponse?.Data?.Media
        ?? throw new InvalidOperationException($"No media found for id {id}");
@@ -79,7 +78,7 @@ genres
 
         public async Task<IEnumerable<Show>> GetShows(int currentPage)
         {
-            String apiUrl = "https://graphql.anilist.co";
+      
 
             string graphQLQuery = @"query( $currentPage: Int) {
 Page(page: $currentPage, perPage: 5) {
@@ -120,7 +119,7 @@ Page(page: $currentPage, perPage: 5) {
 
 
 
-            using var request = new HttpRequestMessage(HttpMethod.Post, apiUrl)
+            using var request = new HttpRequestMessage(HttpMethod.Post, _anilistApiUrl)
             {
                 Content = new StringContent(jsonPayload, Encoding.UTF8, "application/json")
             };
@@ -128,21 +127,23 @@ Page(page: $currentPage, perPage: 5) {
 
             using var response = await _client.SendAsync(request);
 
+            if (!response.IsSuccessStatusCode)
+            {
+
+                throw new HttpRequestException($"AniList API returned {response.StatusCode}");
+            }
+
             string responseData = await response.Content.ReadAsStringAsync();
             var showResponse = JsonConvert.DeserializeObject<GraphQLResponse<MediaWrapper>>(responseData);
 
             return showResponse?.Data?.Page?.media ?? Enumerable.Empty<Show>();
 
 
-
-
-
-
         }
 
         public async Task<IEnumerable<Show>> SearchShows(string search)
         {
-            String apiUrl = "https://graphql.anilist.co";
+       
 
             string graphQLQuery = @"query($search: String) {
   Page(page: 1, perPage: 5) {
@@ -192,16 +193,22 @@ Page(page: $currentPage, perPage: 5) {
 
 
 
-            using var request = new HttpRequestMessage(HttpMethod.Post, apiUrl)
+            using var request = new HttpRequestMessage(HttpMethod.Post, _anilistApiUrl)
             {
                 Content = new StringContent(jsonPayload, Encoding.UTF8, "application/json")
             };
 
             using var response = await _client.SendAsync(request);
+         
+            if (!response.IsSuccessStatusCode)
+            {
+       
+                throw new HttpRequestException($"AniList API returned {response.StatusCode}");
+            }
 
             string responseData = await response.Content.ReadAsStringAsync();
             var showResponse = JsonConvert.DeserializeObject<GraphQLResponse<MediaWrapper>>(responseData);
-
+            
             return showResponse?.Data?.Page?.media ?? Enumerable.Empty<Show>();
 
 

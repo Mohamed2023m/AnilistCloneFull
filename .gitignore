@@ -485,7 +485,7 @@ $RECYCLE.BIN/
 
 # Ignore appsettings files that may contain secrets
 appsettings*.json
-!appsettings.template.json
+!appsettings.json
 
 # Frontend ignores
 node_modules/

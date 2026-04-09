@@ -24,7 +24,7 @@ namespace Anilistclone.Test
             var mock = new Mock<ILogger<ShowController>>();
             ILogger<ShowController> logger = mock.Object;
 
-            ShowController controller = new ShowController(mockCaching.Object, logger);
+            ShowController controller = new ShowController(mockCaching.Object);
 
             mockCaching.Setup(caching => caching.GetShow(It.IsAny<int>()))
                     .ReturnsAsync(new Show());
@@ -53,7 +53,7 @@ namespace Anilistclone.Test
             var mockCaching = new Mock<ICachingService>();
             var mock = new Mock<ILogger<ShowController>>();
             ILogger<ShowController> logger = mock.Object;
-            ShowController controller = new ShowController(mockCaching.Object, logger);
+            ShowController controller = new ShowController(mockCaching.Object);
 
 
             //Act

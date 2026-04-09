@@ -27,6 +27,8 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+app.UseMiddleware<AnilistClone.Middleware.GlobalExceptionMiddleware>();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -38,12 +40,10 @@ app.UseCors();
 
 app.UseHttpsRedirection();
 
-
-
-
-
 app.UseAuthorization();
 
 app.MapControllers();
 
 app.Run();
+
+public partial class Program { }
