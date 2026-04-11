@@ -24,7 +24,9 @@ namespace AnilistClone.Services
         public async Task<Show> GetShow(int id)
         {
 
-            string graphQLQuery = @"query ($id: Int) {
+            string graphQLQuery = 
+                """
+                query ($id: Int) {
   Media(id: $id) {
     id
 coverImage {
@@ -43,7 +45,8 @@ genres
     seasonYear
     description
   }
-}";
+}
+""";
 
 
             var variable = new { id = id };
@@ -82,7 +85,9 @@ genres
         {
 
 
-            string graphQLQuery = @"query( $currentPage: Int) {
+            string graphQLQuery = """
+                query( $currentPage: Int) {
+                
 Page(page: $currentPage, perPage: 5) {
     media( sort: POPULARITY_DESC type: ANIME countryOfOrigin: JP status: RELEASING) {
       id
@@ -101,7 +106,9 @@ Page(page: $currentPage, perPage: 5) {
    
     }
   }
-}";
+}
+
+""";
 
             var variable = new
             {
@@ -144,7 +151,8 @@ Page(page: $currentPage, perPage: 5) {
         {
 
 
-            string graphQLQuery = @"query($search: String) {
+            string graphQLQuery = """
+query($search: String) {
   Page(page: 1, perPage: 5) {
      media( search: $search type: ANIME countryOfOrigin: JP) {
       id
@@ -173,7 +181,8 @@ Page(page: $currentPage, perPage: 5) {
       description
     }
   }
-}";
+}
+""";
             var variable = new
             {
                 search = search,
