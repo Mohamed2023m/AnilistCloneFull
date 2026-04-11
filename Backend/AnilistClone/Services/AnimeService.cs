@@ -68,8 +68,8 @@ genres
 
                 throw new HttpRequestException($"AniList API returned {response.StatusCode}");
             }
-            string responseData = await response.Content.ReadAsStringAsync();
-            var showResponse = JsonSerializer.Deserialize<GraphQLResponse<MediaWrapper>>(responseData, JsonOptions);
+
+            var showResponse = await response.Content.ReadFromJsonAsync<GraphQLResponse<MediaWrapper>>(JsonOptions);
 
             if (showResponse?.Data?.Media == null)
             {
@@ -133,8 +133,7 @@ Page(page: $currentPage, perPage: 5) {
                 throw new HttpRequestException($"AniList API returned {response.StatusCode}");
             }
 
-            string responseData = await response.Content.ReadAsStringAsync();
-            var showResponse = JsonSerializer.Deserialize<GraphQLResponse<MediaWrapper>>(responseData, JsonOptions);
+            var showResponse = await response.Content.ReadFromJsonAsync<GraphQLResponse<MediaWrapper>>(JsonOptions);
 
             return showResponse?.Data?.Page?.media ?? Enumerable.Empty<Show>();
 
@@ -205,16 +204,9 @@ Page(page: $currentPage, perPage: 5) {
 
                 throw new HttpRequestException($"AniList API returned {response.StatusCode}");
             }
-
-            string responseData = await response.Content.ReadAsStringAsync();
-            var showResponse = JsonSerializer.Deserialize<GraphQLResponse<MediaWrapper>>(responseData, JsonOptions);
+            var showResponse = await response.Content.ReadFromJsonAsync<GraphQLResponse<MediaWrapper>>(JsonOptions);
 
             return showResponse?.Data?.Page?.media ?? Enumerable.Empty<Show>();
-
-
-
-
-
 
         }
     }
