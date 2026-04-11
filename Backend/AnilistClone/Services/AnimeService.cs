@@ -1,9 +1,8 @@
-﻿using AnilistClone.Models;
-using System.Text;
-using Newtonsoft.Json;
+﻿using AnilistClone.Exceptions;
+using AnilistClone.Models;
 using AnilistClone.Services.Interfaces;
-using GraphQL.Validation;
-using Microsoft.Extensions.Configuration;
+using System.Text.Json;
+using System.Text;
 
 namespace AnilistClone.Services
 {
@@ -11,6 +10,10 @@ namespace AnilistClone.Services
     {
         private readonly HttpClient _client;
         private readonly string _anilistApiUrl;
+        private static readonly JsonSerializerOptions JsonOptions = new()
+        {
+            PropertyNameCaseInsensitive = true
+        };
 
         public AnimeService(HttpClient client, IConfiguration config)
         {
@@ -20,7 +23,7 @@ namespace AnilistClone.Services
 
         public async Task<Show> GetShow(int id)
         {
-            
+
             string graphQLQuery = @"query ($id: Int) {
   Media(id: $id) {
     id
@@ -51,7 +54,7 @@ genres
                 variables = variable
             };
 
-            string jsonPayload = JsonConvert.SerializeObject(payload);
+            string jsonPayload = JsonSerializer.Serialize(payload);
 
             using var request = new HttpRequestMessage(HttpMethod.Post, _anilistApiUrl)
             {
@@ -66,19 +69,18 @@ genres
                 throw new HttpRequestException($"AniList API returned {response.StatusCode}");
             }
             string responseData = await response.Content.ReadAsStringAsync();
-            var showResponse = JsonConvert.DeserializeObject<GraphQLResponse<MediaWrapper>>(responseData);
+            var showResponse = JsonSerializer.Deserialize<GraphQLResponse<MediaWrapper>>(responseData, JsonOptions);
 
-            return showResponse?.Data?.Media
-       ?? throw new InvalidOperationException($"No media found for id {id}");
-
-
-
-
+            if (showResponse?.Data?.Media == null)
+            {
+                throw new MediaNotFoundException(id);
+            }
+            return showResponse?.Data?.Media;
         }
 
         public async Task<IEnumerable<Show>> GetShows(int currentPage)
         {
-      
+
 
             string graphQLQuery = @"query( $currentPage: Int) {
 Page(page: $currentPage, perPage: 5) {
@@ -115,9 +117,7 @@ Page(page: $currentPage, perPage: 5) {
 
             };
 
-            string jsonPayload = JsonConvert.SerializeObject(payload);
-
-
+            string jsonPayload = JsonSerializer.Serialize(payload);
 
             using var request = new HttpRequestMessage(HttpMethod.Post, _anilistApiUrl)
             {
@@ -134,7 +134,7 @@ Page(page: $currentPage, perPage: 5) {
             }
 
             string responseData = await response.Content.ReadAsStringAsync();
-            var showResponse = JsonConvert.DeserializeObject<GraphQLResponse<MediaWrapper>>(responseData);
+            var showResponse = JsonSerializer.Deserialize<GraphQLResponse<MediaWrapper>>(responseData, JsonOptions);
 
             return showResponse?.Data?.Page?.media ?? Enumerable.Empty<Show>();
 
@@ -143,7 +143,7 @@ Page(page: $currentPage, perPage: 5) {
 
         public async Task<IEnumerable<Show>> SearchShows(string search)
         {
-       
+
 
             string graphQLQuery = @"query($search: String) {
   Page(page: 1, perPage: 5) {
@@ -189,7 +189,7 @@ Page(page: $currentPage, perPage: 5) {
                 variables = variable
             };
 
-            string jsonPayload = JsonConvert.SerializeObject(payload);
+            string jsonPayload = JsonSerializer.Serialize(payload);
 
 
 
@@ -199,16 +199,16 @@ Page(page: $currentPage, perPage: 5) {
             };
 
             using var response = await _client.SendAsync(request);
-         
+
             if (!response.IsSuccessStatusCode)
             {
-       
+
                 throw new HttpRequestException($"AniList API returned {response.StatusCode}");
             }
 
             string responseData = await response.Content.ReadAsStringAsync();
-            var showResponse = JsonConvert.DeserializeObject<GraphQLResponse<MediaWrapper>>(responseData);
-            
+            var showResponse = JsonSerializer.Deserialize<GraphQLResponse<MediaWrapper>>(responseData, JsonOptions);
+
             return showResponse?.Data?.Page?.media ?? Enumerable.Empty<Show>();
 
 
