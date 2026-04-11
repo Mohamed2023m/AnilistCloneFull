@@ -36,7 +36,7 @@ namespace Anilistclone.Test
 
             var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder =>
             {
-                builder.ConfigureAppConfiguration( configBuilder =>
+                builder.ConfigureAppConfiguration(configBuilder =>
                 {
                     configBuilder.AddInMemoryCollection(new Dictionary<string, string?> { ["AnilistApiUrl"] = mockServer.Url + "/graphql" });
                 });

@@ -24,7 +24,7 @@ namespace AnilistClone.Services
         public async Task<Show> GetShow(int id)
         {
 
-            string graphQLQuery = 
+            string graphQLQuery =
                 """
                 query ($id: Int) {
   Media(id: $id) {
@@ -216,7 +216,6 @@ query($search: String) {
             var showResponse = await response.Content.ReadFromJsonAsync<GraphQLResponse<MediaWrapper>>(JsonOptions);
 
             return showResponse?.Data?.Page?.media ?? Enumerable.Empty<Show>();
-
         }
     }
 }
