@@ -5,7 +5,7 @@ using WireMock.RequestBuilders;
 using WireMock.ResponseBuilders;
 using WireMock.Server;
 
-namespace Anilistclone.Test
+namespace AnilistClone.IntegrationTest
 {
     public class GlobalExceptionMiddlewareTest
     {

@@ -1,7 +1,7 @@
 using AnilistClone.Services;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace Anilistclone.Test
+namespace AnilistClone.UnitTest
 {
     public class CachingWrapperTests
     {

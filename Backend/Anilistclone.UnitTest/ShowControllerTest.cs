@@ -11,7 +11,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Moq;
 
-namespace Anilistclone.Test
+namespace AnilistClone.UnitTest
 {
     public class ShowControllerTest
     {
