@@ -2,16 +2,10 @@
 
 namespace AnilistClone.DTOs.GetDTOs
 {
-    public class ShowDto
+    public class MediaDto
     {
-
         public int Id { get; set; }
         public Title? Title { get; set; }
-
         public CoverImage? coverImage { get; set; }
-
-
-
-
     }
 }

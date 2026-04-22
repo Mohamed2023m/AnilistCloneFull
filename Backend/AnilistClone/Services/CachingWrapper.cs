@@ -7,13 +7,12 @@ namespace AnilistClone.Services
     {
         private readonly IMemoryCache _cache;
 
-
         public CachingWrapper(IMemoryCache cache)
         {
             _cache = cache;
         }
 
-        public async Task<T> GetShow<T>(string cacheKey, Func<Task<T>> fetch)
+        public async Task<T> GetMedia<T>(string cacheKey, Func<Task<T>> fetch)
         {
             if (_cache.TryGetValue(cacheKey, out T cachedShow))
             {
@@ -25,8 +24,7 @@ namespace AnilistClone.Services
             return data;
         }
 
-
-        public async Task<T> GetShows<T>(string cacheKey, Func<Task<T>> fetch)
+        public async Task<T> GetAllMedia<T>(string cacheKey, Func<Task<T>> fetch)
         {
             if (_cache.TryGetValue(cacheKey, out T cachedShow))
             {
@@ -38,7 +36,7 @@ namespace AnilistClone.Services
             return data;
         }
 
-        public async Task<T> SearchShows<T>(string cacheKey, Func<Task<T>> fetch)
+        public async Task<T> SearchMedia<T>(string cacheKey, Func<Task<T>> fetch)
         {
             if (_cache.TryGetValue(cacheKey, out T cachedShow))
             {

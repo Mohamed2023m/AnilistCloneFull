@@ -9,7 +9,7 @@ async function fetchShow() {
     const id = parseInt(urlParams.get('id'), 10);
     if (!id) return;
 
-    const response = await fetch(`http://localhost:5243/Show/get-show?id=${id}`, {
+    const response = await fetch(`http://localhost:5243/Media/getMediaById?id=${id}`, {
       method: "GET",
   
     });

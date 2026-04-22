@@ -8,7 +8,11 @@ namespace AnilistClone.Middleware
         private readonly ILogger<GlobalExceptionMiddleware> _logger;
         private readonly IHostEnvironment _env;
 
-        public GlobalExceptionMiddleware(RequestDelegate next, ILogger<GlobalExceptionMiddleware> logger, IHostEnvironment env)
+        public GlobalExceptionMiddleware(
+            RequestDelegate next,
+            ILogger<GlobalExceptionMiddleware> logger,
+            IHostEnvironment env
+        )
         {
             _next = next;
             _logger = logger;
@@ -37,10 +41,10 @@ namespace AnilistClone.Middleware
             {
                 StatusCode = context.Response.StatusCode,
                 Message = "Internal Server Error. Please try again later.",
-                Detail = _env.IsDevelopment() ? exception.Message : null
+                Detail = _env.IsDevelopment() ? exception.Message : null,
             };
 
-           await context.Response.WriteAsJsonAsync(response);
+            await context.Response.WriteAsJsonAsync(response);
         }
     }
 }

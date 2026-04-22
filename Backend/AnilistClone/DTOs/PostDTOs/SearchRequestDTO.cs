@@ -1,10 +1,7 @@
 ﻿namespace AnilistClone.DTOs.PostDTOs
 {
-    public class SearchDTO
+    public class SearchRequestDTO
     {
-
         public string? searchTerm { get; set; }
-
-
     }
 }

@@ -5,13 +5,9 @@ namespace Anilistclone.Test
 {
     public class CachingWrapperTests
     {
-
-
-
         [Fact]
         public async Task GetShow_FetchesAndCaches_OnCacheMiss()
         {
-
             //Arrange
             var cache = new MemoryCache(new MemoryCacheOptions());
 
@@ -23,28 +19,23 @@ namespace Anilistclone.Test
 
             async Task<int> FakeFetchMethod()
             {
-
                 wascalled = true;
 
                 return 1;
             }
             //Act
 
-            var result = await service.GetShow(cacheKey, () => FakeFetchMethod());
+            var result = await service.GetMedia(cacheKey, () => FakeFetchMethod());
 
             Assert.True(wascalled);
             Assert.Equal(1, result);
             Assert.True(cache.TryGetValue(cacheKey, out var value));
             Assert.Equal(1, (int)value);
-
-
         }
-
 
         [Fact]
         public async Task GetShow_CacheMiss_DoesNotCacheWhenFetchFails()
         {
-
             //Arrange
             var cache = new MemoryCache(new MemoryCacheOptions());
 
@@ -53,7 +44,6 @@ namespace Anilistclone.Test
             string cacheKey = $"Show_{1}";
 
             bool wascalled = false;
-
 
             async Task<int> FakeFetchMethod()
             {
@@ -64,17 +54,16 @@ namespace Anilistclone.Test
             }
             //Act
 
-            await Assert.ThrowsAnyAsync<Exception>(() => service.GetShow(cacheKey, () => FakeFetchMethod()));
+            await Assert.ThrowsAnyAsync<Exception>(() =>
+                service.GetMedia(cacheKey, () => FakeFetchMethod())
+            );
             Assert.True(wascalled);
             Assert.False(cache.TryGetValue(cacheKey, out var value));
-
         }
-
 
         [Fact]
         public async Task GetShow_CacheHit_DoesNotFetch()
         {
-
             //Arrange
             var cache = new MemoryCache(new MemoryCacheOptions());
 
@@ -86,7 +75,6 @@ namespace Anilistclone.Test
 
             cache.Set(cacheKey, 1);
 
-
             async Task<int> FakeFetchMethod()
             {
                 wascalled = true;
@@ -94,13 +82,10 @@ namespace Anilistclone.Test
                 return 0;
             }
             //Act
-            var result = await service.GetShow(cacheKey, () => FakeFetchMethod());
+            var result = await service.GetMedia(cacheKey, () => FakeFetchMethod());
             Assert.False(wascalled);
             Assert.True(cache.TryGetValue(cacheKey, out var value));
             Assert.Equal(1, result);
-
         }
-
-
     }
 }

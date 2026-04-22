@@ -10,7 +10,7 @@ try{
 const searchInput = document.getElementById("site-search").value;
 
 
-const response = await fetch("http://localhost:5243/Show/search-animes", {
+const response = await fetch("http://localhost:5243/Media/search-Media", {
 method: "POST",
 headers: {"Content-Type": "application/json"},
 body: JSON.stringify({ searchTerm: searchInput})

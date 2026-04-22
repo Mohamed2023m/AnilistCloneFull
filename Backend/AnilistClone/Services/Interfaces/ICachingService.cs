@@ -4,12 +4,10 @@ namespace AnilistClone.Services.Interfaces
 {
     public interface ICachingService
     {
-        Task<Show> GetShow(int id);
+        Task<Media> GetMedia(int id);
 
-        Task<IEnumerable<Show>> GetShows(int currentPage);
+        Task<IEnumerable<Media>> GetAllMedia(int currentPage);
 
-        Task<IEnumerable<Show>> SearchShows(string searchTerm);
-
-
+        Task<IEnumerable<Media>> SearchMedia(string searchTerm);
     }
 }
