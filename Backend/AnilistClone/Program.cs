@@ -12,7 +12,6 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpClient<IMediaService, MediaService>();
 builder.Services.AddScoped<ICachingService, CachingService>();
-builder.Services.AddScoped<CachingWrapper>();
 builder.Services.AddMemoryCache();
 
 builder.Services.AddCors(options =>
