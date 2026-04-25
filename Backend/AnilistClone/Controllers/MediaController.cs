@@ -14,8 +14,8 @@ public class MediaController : ControllerBase
         _cachingService = cachingService;
     }
 
-    [HttpGet("getMediaById")]
-    public async Task<IActionResult> GetMediaById([FromQuery] int id)
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetMediaById(int id)
     {
         if (id < 0)
         {
@@ -25,24 +25,27 @@ public class MediaController : ControllerBase
         return Ok(show);
     }
 
-    [HttpPost("search-Media")]
+    [HttpPost("search")]
     public async Task<IActionResult> SearchMedia([FromBody] SearchRequestDTO request)
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
         var shows = await _cachingService.SearchMedia(request.searchTerm);
         return Ok(shows);
     }
 
-    [HttpGet("GetAllMedia")]
+    [HttpGet]
     public async Task<IActionResult> GetAllMedia([FromQuery] int currentPage)
     {
-        var shows = await _cachingService.GetAllMedia(currentPage);
+        var media = await _cachingService.GetAllMedia(currentPage);
 
-        var dto = shows
-            .Select(show => new MediaDto
+        var dto = media
+            .Select(Media => new MediaDto
             {
-                Id = show.Id,
-                Title = show.Title,
-                coverImage = show.CoverImage,
+                Id = Media.Id,
+                Title = Media.Title,
+                coverImage = Media.CoverImage,
             })
             .ToList();
 

@@ -6,45 +6,55 @@ namespace AnilistClone.Services
 {
     public class CachingService : ICachingService
     {
-        private readonly IMediaService _animeService;
+        private readonly IMediaService _mediaService;
         private readonly IMemoryCache _cache;
-        private readonly CachingWrapper _wrapper;
 
-        public CachingService(
-            IMemoryCache cache,
-            IMediaService animeService,
-            CachingWrapper wrapper
-        )
+        public CachingService(IMemoryCache cache, IMediaService mediaService)
         {
             _cache = cache;
-            _animeService = animeService;
-            _wrapper = wrapper;
+            _mediaService = mediaService;
         }
 
-        public async Task<Media> GetMedia(int id)
+        private async Task<T> GetOrSet<T>(string cacheKey, Func<Task<T>> fetch, TimeSpan ttl)
+        {
+            if (_cache.TryGetValue(cacheKey, out T cachedValue))
+            {
+                return cachedValue;
+            }
+
+            var data = await fetch();
+
+            _cache.Set(cacheKey, data, ttl);
+
+            return data;
+        }
+
+        public Task<Media> GetMedia(int id)
         {
             string cacheKey = $"Show_{id}";
 
-            return await _wrapper.GetMedia(cacheKey, () => _animeService.GetMedia(id));
+            return GetOrSet(cacheKey, () => _mediaService.GetMedia(id), TimeSpan.FromHours(6));
         }
 
-        public async Task<IEnumerable<Media>> GetAllMedia(int currentPage)
+        public Task<IEnumerable<Media>> GetAllMedia(int currentPage)
         {
             string cacheKey = $"All_Trending_Shows_Page_{currentPage}";
 
-            return await _wrapper.GetAllMedia(
+            return GetOrSet(
                 cacheKey,
-                () => _animeService.GetAllMedia(currentPage)
+                () => _mediaService.GetAllMedia(currentPage),
+                TimeSpan.FromHours(1)
             );
         }
 
-        public async Task<IEnumerable<Media>> SearchMedia(string searchTerm)
+        public Task<IEnumerable<Media>> SearchMedia(string searchTerm)
         {
             string cacheKey = $"Shows_Search_{searchTerm.Replace(" ", "_").ToLower()}";
 
-            return await _wrapper.SearchMedia(
+            return GetOrSet(
                 cacheKey,
-                () => _animeService.SearchMedia(searchTerm)
+                () => _mediaService.SearchMedia(searchTerm),
+                TimeSpan.FromMinutes(5)
             );
         }
     }

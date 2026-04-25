@@ -38,7 +38,7 @@ namespace AnilistClone.IntegrationTest
 
             var client = factory.CreateClient();
 
-            var response = await client.GetAsync("/Media/getMediaById?id=1");
+            var response = await client.GetAsync("/Media/1");
 
             Assert.Equal(System.Net.HttpStatusCode.InternalServerError, response.StatusCode);
         }
