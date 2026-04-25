@@ -32,24 +32,6 @@ Controller → CachingService → MediaService → AniList API
 
 ---
 
-## API Endpoints
-
-* `GET /Media/getMediaById?id=1` → Get anime details
-* `POST /Media/search-Media` → Search anime
-* `GET /Media/GetAllMedia?currentPage=1` → Get trending anime
-
----
-
-## Caching
-
-| Endpoint | Duration |
-| -------- | -------- |
-| By ID    | 6 hours  |
-| Trending | 1 hour   |
-| Search   | 5 min    |
-
----
-
 ## Technologies
 
 * ASP.NET Core Web API
