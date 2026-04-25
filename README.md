@@ -73,8 +73,25 @@ Simple vanilla JavaScript frontend that:
 
 ## Running the Project
 
+### Requirements
+- .NET 8 SDK
+- A modern web browser
+
+---
+
+### Build and run the backend
+
 ```bash
-dotnet run
+# Clone the repository
+git clone <your-repo-url>
+cd AnilistClone
+
+# Build the solution
+dotnet build
+
+# Run the backend API
+dotnet run --project AnilistClone
+
 ```
 
 Then open the frontend HTML files in a browser.
@@ -82,9 +99,8 @@ Then open the frontend HTML files in a browser.
 ---
 
 ## Future Improvements
-
-* Add Authentication + Authorization (JWT + Roles)
 * Add Docker + Deployment (with CI/CD pipeline)
+* Add Authentication + Authorization (JWT + Roles)
 * Rate limiting + API protection layer
 
 
