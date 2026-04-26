@@ -74,8 +74,8 @@ Simple vanilla JavaScript frontend that:
 ## Running the Project
 
 ### Requirements
-- .NET 8 SDK
-- A modern web browser
+- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
+- A modern web browser (Chrome, Firefox, or Edge)
 
 ---
 
@@ -94,7 +94,14 @@ dotnet run --project AnilistClone
 
 ```
 
-Then open the frontend HTML files in a browser.
+### Open the frontend
+
+1. Make sure the backend is running.
+2. Navigate to `Frontend/NewAnilistFrontend/trending/`
+3. Open `index.html` in your browser.
+
+Path example:
+C:\Users\<YourUser>\Desktop\AnilistCloneFull\Frontend\NewAnilistFrontend\trending\index.html
 
 ---
 
