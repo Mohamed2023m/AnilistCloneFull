@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using AnilistClone.Exceptions;
 
 namespace AnilistClone.Middleware
 {
@@ -35,12 +36,19 @@ namespace AnilistClone.Middleware
         private async Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             context.Response.ContentType = "application/json";
-            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+
+            context.Response.StatusCode = exception switch
+            {
+                MediaNotFoundException => StatusCodes.Status404NotFound,
+                ArgumentException => StatusCodes.Status400BadRequest,
+                HttpRequestException => StatusCodes.Status503ServiceUnavailable,
+                _ => StatusCodes.Status500InternalServerError,
+            };
 
             var response = new
             {
-                StatusCode = context.Response.StatusCode,
-                Message = "Internal Server Error. Please try again later.",
+                Status = context.Response.StatusCode,
+                Title = "An error occurred",
                 Detail = _env.IsDevelopment() ? exception.Message : null,
             };
 

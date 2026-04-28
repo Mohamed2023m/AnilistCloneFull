@@ -7,10 +7,10 @@ using WireMock.Server;
 
 namespace AnilistClone.IntegrationTest
 {
-    public class GlobalExceptionMiddlewareTest
+    public class Media_RequestPipeline_IntegrationTests
     {
         [Fact]
-        public async Task Test1()
+        public async Task Returns_ServiceUnavailable_When_ExternalApiFails()
         {
             using var mockServer = WireMockServer.Start();
 
@@ -40,7 +40,7 @@ namespace AnilistClone.IntegrationTest
 
             var response = await client.GetAsync("/Media/1");
 
-            Assert.Equal(System.Net.HttpStatusCode.InternalServerError, response.StatusCode);
+            Assert.Equal(System.Net.HttpStatusCode.ServiceUnavailable, response.StatusCode);
         }
     }
 }
