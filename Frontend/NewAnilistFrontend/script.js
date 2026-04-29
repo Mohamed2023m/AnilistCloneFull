@@ -1,6 +1,6 @@
 console.log("Loaded script:", document.currentScript.src);
 
-var url = "http://localhost:5243/Media/GetAllMedia";
+var url = "http://localhost:5243/Media";
 
 
 let currentPage = 1;

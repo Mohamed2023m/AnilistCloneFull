@@ -1,5 +1,4 @@
-﻿using System.Text;
-using System.Text.Json;
+﻿using System.Text.Json;
 using AnilistClone.Exceptions;
 using AnilistClone.Models;
 using AnilistClone.Services.Interfaces;
@@ -50,14 +49,7 @@ query ($id: Int) {
 
             var payload = new { query = graphQLQuery, variables = variable };
 
-            string jsonPayload = JsonSerializer.Serialize(payload);
-
-            using var request = new HttpRequestMessage(HttpMethod.Post, _anilistApiUrl)
-            {
-                Content = new StringContent(jsonPayload, Encoding.UTF8, "application/json"),
-            };
-
-            using var response = await _client.SendAsync(request);
+            using var response = await _client.PostAsJsonAsync(_anilistApiUrl, payload);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -101,14 +93,7 @@ query ($currentPage: Int) {
 
             var payload = new { query = graphQLQuery, variables = variable };
 
-            string jsonPayload = JsonSerializer.Serialize(payload);
-
-            using var request = new HttpRequestMessage(HttpMethod.Post, _anilistApiUrl)
-            {
-                Content = new StringContent(jsonPayload, Encoding.UTF8, "application/json"),
-            };
-
-            using var response = await _client.SendAsync(request);
+            using var response = await _client.PostAsJsonAsync(_anilistApiUrl, payload);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -160,14 +145,7 @@ query ($search: String) {
 
             var payload = new { query = graphQLQuery, variables = variable };
 
-            string jsonPayload = JsonSerializer.Serialize(payload);
-
-            using var request = new HttpRequestMessage(HttpMethod.Post, _anilistApiUrl)
-            {
-                Content = new StringContent(jsonPayload, Encoding.UTF8, "application/json"),
-            };
-
-            using var response = await _client.SendAsync(request);
+            using var response = await _client.PostAsJsonAsync(_anilistApiUrl, payload);
 
             if (!response.IsSuccessStatusCode)
             {

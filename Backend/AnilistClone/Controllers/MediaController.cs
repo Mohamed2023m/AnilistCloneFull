@@ -17,7 +17,7 @@ public class MediaController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetMediaById(int id)
     {
-        if (id < 0)
+        if (id <= 0)
         {
             return BadRequest();
         }
