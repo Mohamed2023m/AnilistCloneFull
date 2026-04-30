@@ -1,6 +1,3 @@
-console.log("Loaded script:", document.currentScript.src);
-
-
 
 
 
@@ -10,12 +7,13 @@ try{
 const searchInput = document.getElementById("site-search").value;
 
 
-const response = await fetch("http://localhost:5243/Media/search", {
+const response = await fetch(`${MEDIA_URL}/search`, {
 method: "POST",
 headers: {"Content-Type": "application/json"},
 body: JSON.stringify({ searchTerm: searchInput})
 
 });
+
 
 if(!response.ok) throw new Error("Network response was not ok");
 

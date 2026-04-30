@@ -1,7 +1,6 @@
+
+
 console.log("Loaded script:", document.currentScript.src);
-
-var url = "http://localhost:5243/Media";
-
 
 let currentPage = 1;
 async function  handleOnClick(){
@@ -16,8 +15,7 @@ document.getElementById("LoadButton").addEventListener("click",handleOnClick);
 
 async function fetchJson() {
     try {
-      const response = await fetch(
-  `${url}?currentPage=${currentPage}`,
+      const response = await fetch(`${MEDIA_URL}?currentPage=${currentPage}`,
   {
     method: "GET"
   }
