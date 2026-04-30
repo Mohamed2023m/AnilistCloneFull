@@ -27,7 +27,7 @@ async function fetchJson() {
         json.forEach(anime => {
             const animeDiv = document.createElement("div");
             animeDiv.innerHTML = `
-                <a href="../details.html?id=${anime.id}">
+                <a href="details.html?id=${anime.id}">
                 <h3>${anime.title.english ?? anime.title.romaji} </h3>   
                 <img src="${anime.coverImage.large}" alt="${anime.title.romaji}">
                 </a>

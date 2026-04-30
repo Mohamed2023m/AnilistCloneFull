@@ -41,7 +41,7 @@ json.forEach(anime => {
 
 const resultDiv = document.createElement("div")
 
-resultDiv.innerHTML = `<a href="../details.html?id=${anime.id}">
+resultDiv.innerHTML = `<a href="details.html?id=${anime.id}">
                 <h3>${anime.title.english ?? anime.title.romaji} </h3>  </a>`;
 
 resultContainer.appendChild(resultDiv);
