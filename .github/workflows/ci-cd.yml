@@ -5,24 +5,31 @@ on:
     branches: [ "main" ]
 
 jobs:
-
+  # 1. THE GATEKEEPER: Build and Test the Backend
   build-and-test-backend:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Backend/AnilistClone # This tells GitHub where your .sln or .csproj is
     steps:
       - uses: actions/checkout@v4
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
-          cache: false 
-      - name: Restore
+          cache: false # Turned off to prevent the lock-file error
+
+      - name: Restore dependencies
         run: dotnet restore
+
       - name: Build
         run: dotnet build --no-restore --configuration Release
+
       - name: Run tests
-        run: dotnet test --no-build --configuration Release --verbosity normal
+        run: dotnet test --no-build --configuration Release
 
-
+  # 2. DEPLOY BACKEND: Only triggers if Job 1 passes
   deploy-backend:
     needs: build-and-test-backend
     runs-on: ubuntu-latest
@@ -31,7 +38,7 @@ jobs:
       - name: Trigger Render Deploy
         run: curl -f ${{ secrets.RENDER_DEPLOY_HOOK }}
 
-
+  # 3. DEPLOY FRONTEND: Only triggers if Job 1 passes
   deploy-frontend:
     needs: build-and-test-backend
     runs-on: ubuntu-latest
@@ -49,7 +56,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'Frontend/NewAnilistFrontend'
+          path: 'Frontend/NewAnilistFrontend' # Your frontend folder
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
