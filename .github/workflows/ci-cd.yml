@@ -1,39 +1,55 @@
-name: CI/CD
+name: CI/CD Pipeline
 
 on:
   push:
     branches: [ "main" ]
 
 jobs:
-  build-and-test:
+
+  build-and-test-backend:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
+      - uses: actions/checkout@v4
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
-          cache: true
-
-      - name: Restore dependencies
+          cache: false 
+      - name: Restore
         run: dotnet restore
-
       - name: Build
         run: dotnet build --no-restore --configuration Release
-
       - name: Run tests
         run: dotnet test --no-build --configuration Release --verbosity normal
 
-  deploy:
-   
-    needs: build-and-test
-    runs-on: ubuntu-latest
 
+  deploy-backend:
+    needs: build-and-test-backend
+    runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
-    
     steps:
       - name: Trigger Render Deploy
-        run: |
-          curl -f ${{ secrets.RENDER_DEPLOY_HOOK }}
+        run: curl -f ${{ secrets.RENDER_DEPLOY_HOOK }}
+
+
+  deploy-frontend:
+    needs: build-and-test-backend
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'Frontend/NewAnilistFrontend'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
