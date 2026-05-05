@@ -5,6 +5,11 @@ A backend API built with ASP.NET Core that fetches anime data from the AniList G
 
 ---
 
+## Live Demo
+A live demo of the application is available here:
+**[Live Demo](https://mohamed2023m.github.io/AnilistCloneFull/)**
+
+
 ## How it Works
 
 The backend acts as a wrapper around the AniList GraphQL API.
