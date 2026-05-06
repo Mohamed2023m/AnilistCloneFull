@@ -8,33 +8,6 @@ namespace AnilistClone.UnitTest
 {
     public class CachingServiceTests
     {
-        private class FakeMediaService : IMediaService
-        {
-            public bool WasCalled { get; private set; }
-
-            public Func<Task<Media>> GetMediaFunc { get; set; }
-            public Func<Task<IEnumerable<Media>>> GetAllMediaFunc { get; set; }
-            public Func<Task<IEnumerable<Media>>> SearchMediaFunc { get; set; }
-
-            public async Task<Media> GetMedia(int id)
-            {
-                WasCalled = true;
-                return await GetMediaFunc();
-            }
-
-            public async Task<IEnumerable<Media>> GetAllMedia(int page)
-            {
-                WasCalled = true;
-                return await GetAllMediaFunc();
-            }
-
-            public async Task<IEnumerable<Media>> SearchMedia(string term)
-            {
-                WasCalled = true;
-                return await SearchMediaFunc();
-            }
-        }
-
         [Fact]
         public async Task GetMedia_CacheMiss_FetchesAndCaches()
         {
