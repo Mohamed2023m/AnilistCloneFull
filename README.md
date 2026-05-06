@@ -121,4 +121,3 @@ C:\Users\<YourUser>\Desktop\AnilistCloneFull\Frontend\NewAnilistFrontend\trendin
 ## Author
 
 Full-stack learning project focused on API design, caching, and real-world backend architecture.
-// test ci
