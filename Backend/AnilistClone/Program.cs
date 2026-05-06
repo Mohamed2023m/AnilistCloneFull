@@ -3,6 +3,8 @@ using AnilistClone.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddHealthChecks();
+
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -24,9 +26,10 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+app.MapHealthChecks("/health");
+
 app.UseMiddleware<AnilistClone.Middleware.GlobalExceptionMiddleware>();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

@@ -2,6 +2,7 @@ using AnilistClone.Models;
 using AnilistClone.Services;
 using AnilistClone.Services.Interfaces;
 using Microsoft.Extensions.Caching.Memory;
+using Moq;
 
 namespace AnilistClone.UnitTest
 {
@@ -39,17 +40,17 @@ namespace AnilistClone.UnitTest
         {
             var cache = new MemoryCache(new MemoryCacheOptions());
 
-            var fakeService = new FakeMediaService
-            {
-                GetMediaFunc = async () => new Media { Id = 1 },
-            };
+            var mockMediaService = new Mock<IMediaService>();
 
-            var service = new CachingService(cache, fakeService);
+            mockMediaService.Setup(x => x.GetMedia(1)).ReturnsAsync(new Media { Id = 1 });
 
-            var result = await service.GetMedia(1);
+            var cachingService = new CachingService(cache, mockMediaService.Object);
 
-            Assert.True(fakeService.WasCalled);
+            var result = await cachingService.GetMedia(1);
+
             Assert.Equal(1, result.Id);
+
+            mockMediaService.Verify(x => x.GetMedia(1), Times.Once);
 
             Assert.True(cache.TryGetValue("Show_1", out var cached));
             Assert.Equal(1, ((Media)cached).Id);
@@ -62,17 +63,16 @@ namespace AnilistClone.UnitTest
 
             cache.Set("Show_1", new Media { Id = 1 });
 
-            var fakeService = new FakeMediaService
-            {
-                GetMediaFunc = async () => new Media { Id = 2 },
-            };
+            var mockService = new Mock<IMediaService>();
 
-            var service = new CachingService(cache, fakeService);
+            mockService.Setup(x => x.GetMedia(1)).ReturnsAsync(new Media { Id = 2 });
+            var service = new CachingService(cache, mockService.Object);
 
             var result = await service.GetMedia(1);
 
-            Assert.False(fakeService.WasCalled);
             Assert.Equal(1, result.Id);
+            mockService.Verify(x => x.GetMedia(1), Times.Never);
+            Assert.True(cache.TryGetValue("Show_1", out _));
         }
 
         [Fact]
@@ -80,19 +80,14 @@ namespace AnilistClone.UnitTest
         {
             var cache = new MemoryCache(new MemoryCacheOptions());
 
-            var fakeService = new FakeMediaService
-            {
-                GetMediaFunc = async () =>
-                {
-                    throw new Exception("fail");
-                },
-            };
+            var mockService = new Mock<IMediaService>();
 
-            var service = new CachingService(cache, fakeService);
+            mockService.Setup(x => x.GetMedia(1)).ThrowsAsync(new Exception("fail"));
+
+            var service = new CachingService(cache, mockService.Object);
 
             await Assert.ThrowsAsync<Exception>(() => service.GetMedia(1));
-
-            Assert.True(fakeService.WasCalled);
+            mockService.Verify(x => x.GetMedia(1), Times.AtLeastOnce);
             Assert.False(cache.TryGetValue("Show_1", out _));
         }
     }
