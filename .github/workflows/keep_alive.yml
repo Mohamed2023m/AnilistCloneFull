@@ -1,0 +1,21 @@
+name: Keep Database Awake
+
+on:
+  schedule:
+    # This standard cron syntax runs the job at minute 0 past every hour
+    - cron: '0 * * * *'
+  workflow_dispatch: # This allows you to manually trigger the ping from GitHub
+
+jobs:
+  ping-db:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install PostgreSQL Client
+        run: sudo apt-get update && sudo apt-get install -y postgresql-client
+
+      - name: Ping PostgreSQL
+        env:
+          # This pulls the password securely from the GitHub Secret you created
+          PGPASSWORD: ${{ secrets.AIVEN_DB_PASSWORD }}
+        run: |
+          psql "host=ppg-1b156578-postgresql12.j.aivencloud.com port=17721 dbname=defaultdb user=avnadmin" -c "SELECT 1;"
