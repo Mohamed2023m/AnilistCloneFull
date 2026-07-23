@@ -18,4 +18,4 @@ jobs:
           # This pulls the password securely from the GitHub Secret you created
           PGPASSWORD: ${{ secrets.AIVEN_DB_PASSWORD }}
         run: |
-          psql "host=ppg-1b156578-postgresql12.j.aivencloud.com port=17721 dbname=defaultdb user=avnadmin" -c "SELECT 1;"
+          psql "host=pg-1b156578-postgresql12.j.aivencloud.com port=17721 dbname=defaultdb user=avnadmin" -c "SELECT 1;"
