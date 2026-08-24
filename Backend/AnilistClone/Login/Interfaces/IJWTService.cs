@@ -1,9 +1,9 @@
-﻿using AnilistClone.Login.Models;
+﻿using AnilistClone.Models;
 
 namespace AnilistClone.Login.Interfaces
 {
     public interface IJWTService
     {
-        public void GenerateToken(User user, HttpContext context);
+        public string GenerateToken(User user);
     }
 }

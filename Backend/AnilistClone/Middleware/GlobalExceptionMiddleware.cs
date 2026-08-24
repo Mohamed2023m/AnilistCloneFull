@@ -41,6 +41,7 @@ namespace AnilistClone.Middleware
             {
                 MediaNotFoundException => StatusCodes.Status404NotFound,
                 ArgumentException => StatusCodes.Status400BadRequest,
+                UserExist => StatusCodes.Status400BadRequest,
                 HttpRequestException => StatusCodes.Status503ServiceUnavailable,
                 _ => StatusCodes.Status500InternalServerError,
             };

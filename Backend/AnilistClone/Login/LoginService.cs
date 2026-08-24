@@ -1,28 +1,32 @@
-﻿using AnilistClone.Login.Interfaces;
-using AnilistClone.Login.Models;
+﻿using AnilistClone.AnilistClone.Data;
+using AnilistClone.Login.DTOs.Requests;
+using AnilistClone.Login.Interfaces;
+using AnilistClone.Models;
 using BCrypt.Net;
 
 namespace AnilistClone.Login
 {
     public class LoginService : ILoginService
     {
-        private readonly ILoginRepository _repository;
+        private readonly AppDbContext _context;
 
-        public LoginService(ILoginRepository respository)
+        public LoginService(AppDbContext context)
         {
-            respository = _repository;
+            _context = context;
         }
 
-        public User AuthenticateUser(string username, string password)
+        public User AuthenticateUser(LoginRequest request)
         {
-            var authenticatedUser = _repository.FetchHashedPassword(username);
+            var authenticatedUser = _context.Users.FirstOrDefault(u =>
+                u.Username == request.Username
+            );
 
             if (authenticatedUser == null)
             {
                 return null;
             }
 
-            bool isMatch = BCrypt.Net.BCrypt.Verify(password, authenticatedUser.Password);
+            bool isMatch = BCrypt.Net.BCrypt.Verify(request.Password, authenticatedUser.Password);
 
             if (isMatch == true)
             {

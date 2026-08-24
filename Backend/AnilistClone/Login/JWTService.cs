@@ -2,7 +2,7 @@
 using System.Security.Claims;
 using System.Text;
 using AnilistClone.Login.Interfaces;
-using AnilistClone.Login.Models;
+using AnilistClone.Models;
 using Microsoft.IdentityModel.Tokens;
 
 namespace AnilistClone.Login
@@ -16,38 +16,27 @@ namespace AnilistClone.Login
             _config = config;
         }
 
-        public void GenerateToken(User user, HttpContext context)
+        public string GenerateToken(User user)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Username),
-                new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
-                new Claim(ClaimTypes.Role, (user.UserType)),
+                new Claim(JwtRegisteredClaimNames.Sub, user.UserId.ToString()),
+                new Claim(ClaimTypes.Name, user.Username),
+                new Claim(ClaimTypes.Role, (user.UserType.ToString())),
             };
 
             var token = new JwtSecurityToken(
                 issuer: _config["Jwt:Issuer"],
                 audience: _config["Jwt:Audience"],
                 claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(30),
+                expires: DateTime.UtcNow.AddDays(1),
                 signingCredentials: credentials
             );
 
-            context.Response.Cookies.Append(
-                "jwt_token",
-                new JwtSecurityTokenHandler().WriteToken(token),
-                new CookieOptions
-                {
-                    HttpOnly = true,
-                    Secure = true,
-                    SameSite = SameSiteMode.None,
-                    Path = "/",
-                    MaxAge = TimeSpan.FromMinutes(30),
-                }
-            );
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 }

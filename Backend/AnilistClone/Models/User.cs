@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using AnilistClone.Models.Enums;
 
-namespace AnilistClone.Login.Models
+namespace AnilistClone.Models
 {
     public class User
     {
@@ -12,7 +13,6 @@ namespace AnilistClone.Login.Models
         [Required(AllowEmptyStrings = false, ErrorMessage = "Password is required")]
         public required string Password { get; set; }
 
-        [Required]
-        public required string UserType { get; set; }
+        public UserType UserType { get; set; } = UserType.User;
     }
 }

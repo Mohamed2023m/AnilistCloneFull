@@ -1,4 +1,4 @@
-﻿using AnilistClone.Login.Models;
+﻿using AnilistClone.Models;
 
 namespace AnilistClone.Login.Interfaces
 {
