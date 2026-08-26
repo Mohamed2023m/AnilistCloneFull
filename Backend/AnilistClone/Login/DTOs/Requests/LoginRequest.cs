@@ -10,7 +10,7 @@ namespace AnilistClone.Login.DTOs.Requests
         public string Username { get; set; }
 
         [Required]
-        [MinLength(8, ErrorMessage = "Password must be at least 8 characters.")]
+        [MinLength(7, ErrorMessage = "Password must be at least 7 characters.")]
         [MaxLength(100)]
         public string Password { get; set; }
     }
