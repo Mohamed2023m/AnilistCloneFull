@@ -1,29 +1,29 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Trending Anime</title>
-    <link rel="stylesheet" href = "../style.css">
+    <link href="/output.css" rel="stylesheet">
 </head>
+
 <body>
-   <div id="search-container">
 
-    <div class="search-bar">
-        <label for="site-search">Search the site:</label>
-        <input type="search" id="site-search">
-        <button id="searchButton">Search</button>
+    <form id="search-container" class="w-3/5 max-w-2xl mx-auto mt-8 ">
+        <div class="search-bar flex justify-center items-center ">
+            <input type="search" class="w-1/2" id="site-search">
+            <button id="searchButton">Search</button>
+        </div>
+        <div id="results" class="search-results"> Results </div>
+    </form>
+    <div id="content-container" class="w-3/5 max-w-2x1 mx-auto">
+        <div id="output" class="w-1/2 mx-auto"></div>
+        <button id="LoadButton" class="w-2/3 mx-auto">Load more</button>
     </div>
 
-    <div id="results" class="search-results">
-        Results
-    </div>
 
-</div>
-
-    <div id="output"></div>
- <button id="LoadButton">Load more</button>
-    <!-- Adjust script path if needed -->
-   <script src="config.js"></script>
-   <script src="script.js?v=2"></script>
-   <script src="search.js"></script>
+    <script src="config.js"></script>
+    <script src="script.js?v=2"></script>
+    <script src="search.js"></script>
 </body>
+
 </html>
