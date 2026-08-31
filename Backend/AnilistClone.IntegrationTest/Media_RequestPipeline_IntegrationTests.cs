@@ -39,9 +39,6 @@ namespace AnilistClone.IntegrationTest
             var client = factory.CreateClient();
 
             var response = await client.GetAsync("/Media/1");
-            Console.WriteLine($"Status: {response.StatusCode}");
-            Console.WriteLine($"Body: {await response.Content.ReadAsStringAsync()}");
-            Console.WriteLine($"WireMock requests: {mockServer.LogEntries.Count}");
 
             Assert.Equal(System.Net.HttpStatusCode.ServiceUnavailable, response.StatusCode);
         }
