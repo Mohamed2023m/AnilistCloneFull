@@ -71,7 +71,7 @@ query ($id: Int) {
         {
             string graphQLQuery = """
 query ($currentPage: Int) {
-  Page(page: $currentPage, perPage: 20) {
+  Page(page: $currentPage, perPage: 5) {
     media(sort: POPULARITY_DESC type: ANIME countryOfOrigin: JP status: RELEASING) {
       id
       coverImage {
